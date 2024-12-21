@@ -3,6 +3,8 @@ import Home from "../pages/home/Home";
 import Layout from "../pages/layout/Layout";
 import Users from "@/pages/users/Users";
 
+import DepositPage from "./../pages/deposit/Deposit";
+
 
 const router = createBrowserRouter([
   {
@@ -17,6 +19,10 @@ const router = createBrowserRouter([
         {
             path:'/users',
             element:<Users/>
+        },
+        {
+            path:'/deposit-requests',
+            element:<DepositPage/>
         },
     ],
   },
