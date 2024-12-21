@@ -7,9 +7,10 @@ import {
   TabsTrigger,
   TabsContent,
 } from '@/components/ui/tabs';
-import DepositTable from './DepositTable';
 
-const DepositPage = () => {
+import WithdrawTable from './WithdrawTable';
+
+const WithdrawPage = () => {
   const axiosSecure = useAxiosSecure();
   const [status, setStatus] = useState('pending');
   const [currentPage, setCurrentPage] = useState('pending');
@@ -25,7 +26,7 @@ const DepositPage = () => {
         search: searchTerm,
         status:status 
       });
-      const response = await axiosSecure.get(`/deposit?${params.toString()}`);
+      const response = await axiosSecure.get(`/withdraw?${params.toString()}`);
       return response.data;
     },
     keepPreviousData: true,
@@ -38,17 +39,17 @@ const DepositPage = () => {
       <Tabs value={status} onValueChange={setStatus} className=''>
         <TabsList className='w-full m-4'>
           <TabsTrigger className='w-full' value="pending">Pending Requests</TabsTrigger>
-          <TabsTrigger className='w-full' value="success">Successful Requests</TabsTrigger>
+          <TabsTrigger className='w-full' value="approved">Successful Requests</TabsTrigger>
         </TabsList>
         <TabsContent value="pending">
-          <DepositTable refetch={refetch} isError={isError} isLoading={isLoading} currentPage={currentPage} setCurrentPage={setCurrentPage} data={data?.deposits} totalPages={data?.totalPages} />
+          <WithdrawTable refetch={refetch} isError={isError} isLoading={isLoading} currentPage={currentPage} setCurrentPage={setCurrentPage} data={data?.deposits} totalPages={data?.totalPages} />
         </TabsContent>
-        <TabsContent value="success">
-          <DepositTable refetch={refetch} isError={isError} isLoading={isLoading} currentPage={currentPage} setCurrentPage={setCurrentPage} data={data?.deposits} totalPages={data?.totalPages} />
+        <TabsContent value="approved">
+          <WithdrawTable refetch={refetch} isError={isError} isLoading={isLoading} currentPage={currentPage} setCurrentPage={setCurrentPage} data={data?.deposits} totalPages={data?.totalPages} />
         </TabsContent>
       </Tabs>
     </div>
   );
 };
 
-export default DepositPage;
+export default WithdrawPage;

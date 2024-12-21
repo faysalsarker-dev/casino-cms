@@ -4,6 +4,7 @@ import Layout from "../pages/layout/Layout";
 import Users from "@/pages/users/Users";
 
 import DepositPage from "./../pages/deposit/Deposit";
+import WithdrawPage from "@/pages/withdraw/Withdraw";
 
 
 const router = createBrowserRouter([
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
         {
             path:'/deposit-requests',
             element:<DepositPage/>
+        },
+        {
+            path:'/withdrawal-requests',
+            element:<WithdrawPage/>
         },
     ],
   },
