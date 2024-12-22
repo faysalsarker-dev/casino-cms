@@ -13,7 +13,7 @@ const DepositPage = () => {
   const axiosSecure = useAxiosSecure();
   const [status, setStatus] = useState('pending');
   const [currentPage, setCurrentPage] = useState('pending');
-  const [searchTerm, setSearchTerm] = useState('pending');
+  const [searchTerm] = useState('pending');
 
 
   const { data, isError, isLoading, refetch } = useQuery({

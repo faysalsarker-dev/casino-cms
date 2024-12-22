@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosCommon = axios.create({
-  baseURL: import.meta.env.BASE_URL,
+  baseURL: 'http://localhost:5000',
 
 });
 
