@@ -5,6 +5,7 @@ import Users from "@/pages/users/Users";
 
 import DepositPage from "./../pages/deposit/Deposit";
 import WithdrawPage from "@/pages/withdraw/Withdraw";
+import LoginPage from "@/pages/login/LoginPage";
 
 
 const router = createBrowserRouter([
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
         },
     ],
   },
+  {
+    path:'/login',
+    element:<LoginPage/>
+  }
 
 ]);
 
