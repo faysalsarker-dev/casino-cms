@@ -52,7 +52,7 @@ export function DataTable({ columns, data }) {
                 key={row.id}
                 className={`${
                   rowIndex % 2 === 0 ? "bg-white" : "bg-gray-50"
-                } hover:bg-gray-100`}
+                } hover:bg-gray-100 py-6`}
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell

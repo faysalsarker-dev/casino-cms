@@ -5,7 +5,15 @@ import WithdrawTable from './WithdrawTable';
 import useAxios from './../../hooks/useAxios/useAxios';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select';
-
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination"
 const WithdrawPage = () => {
   const axiosCommon = useAxios();
   const axiosSecure = useAxiosSecure();
@@ -27,11 +35,11 @@ const WithdrawPage = () => {
   }, [searchTerm]);
 
   const { data, isError, isLoading, refetch } = useQuery({
-    queryKey: ['depositRequests', status,currentPage,searchTerm,date],
+    queryKey: ['depositRequests', status,currentPage,searchTerm,date,debouncedSearchTerm],
     queryFn: async () => {
       const params = new URLSearchParams({
         limit : 10,
-        search: searchTerm,
+        search: debouncedSearchTerm,
         page: currentPage,
         status:status 
       });
@@ -110,6 +118,39 @@ const WithdrawPage = () => {
         data={data?.withdraws}
         totalPages={data?.totalPages}
       />
+        <Pagination className={'mt-8'}>
+  <PaginationContent>
+    <PaginationPrevious
+      onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+      disabled={currentPage === 1}
+    >
+      Previous
+    </PaginationPrevious>
+    {Array.from({ length: data?.totalPages || 1 }).map((_, index) => {
+      const page = index + 1;
+      return (
+        <PaginationItem key={page}>
+          <PaginationLink
+            onClick={() => setCurrentPage(page)}
+            className={`px-4 py-2 rounded ${
+              currentPage === page ? 'bg-blue-500 text-white' : 'bg-gray-200'
+            }`}
+          >
+            {page}
+          </PaginationLink>
+        </PaginationItem>
+      );
+    })}
+    <PaginationNext
+      onClick={() =>
+        setCurrentPage((prev) => Math.min(prev + 1, data?.totalPages || 1))
+      }
+      disabled={currentPage === data?.totalPages}
+    >
+      Next
+    </PaginationNext>
+  </PaginationContent>
+</Pagination>
     </div>
   );
 };

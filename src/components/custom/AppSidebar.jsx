@@ -10,6 +10,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { Link, useLocation } from "react-router-dom";
+import useAuth from './../../hooks/useAuth/useAuth';
 
 // Menu items.
 const items = [
@@ -42,7 +43,7 @@ const items = [
 
 export function AppSidebar() {
   const location = useLocation();
-
+const {logOut}=useAuth()
   return (
     <Sidebar collapsible="icon">
       <SidebarContent>
@@ -82,7 +83,7 @@ export function AppSidebar() {
             className="flex items-center gap-3 w-full text-gray-700 px-4 py-3 rounded-md hover:bg-red-500 hover:text-white transition-all"
             asChild
           >
-            <button onClick={() => alert("Logging out...")}>
+            <button onClick={() => logOut()}>
               <LogOut className="w-5 h-5" />
               <span className="font-medium">Logout</span>
             </button>

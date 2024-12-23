@@ -12,16 +12,35 @@ const LoginPage = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const {signIn,user}=useAuth()
+  const {signIn,user,checkLogin}=useAuth()
   const navigate = useNavigate()
 
-  const onSubmit = async(data) => {
-    console.log('Login Data:', data);
-  await  signIn(data.email,data.password)
-  navigate(-1)
-  toast.success('login successful')
+  const onSubmit = async (data) => {
+    try {
+     
+      const isAdmin = await checkLogin(data.email);
+  
+      if (!isAdmin || !isAdmin.accessGranted) {
+        toast.error("Unauthorized access");
+        return; 
+      }
+  
+      
+      await signIn(data.email, data.password);
+  
+     
+      navigate(-1);
+  
+      
+      toast.success("Login successful");
+    } catch (error) {
+      // Handle errors
+      console.error("Login error:", error.message);
+      toast.error(`Failed to log in. ${error.message ==='Failed to check admin login' ? 'Unauthorized access':error.message}`);
+    }
   };
-  console.log('user',user);
+  
+  
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white shadow-lg rounded-lg p-8 max-w-sm w-full">
