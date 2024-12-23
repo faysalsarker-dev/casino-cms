@@ -7,6 +7,8 @@ import DepositPage from "./../pages/deposit/Deposit";
 import WithdrawPage from "@/pages/withdraw/Withdraw";
 import LoginPage from "@/pages/login/LoginPage";
 
+import AccountManagementPage from './../pages/content/AccountManagement';
+
 
 const router = createBrowserRouter([
   {
@@ -21,6 +23,10 @@ const router = createBrowserRouter([
         {
             path:'/users',
             element:<Users/>
+        },
+        {
+            path:'/add-peyment',
+            element:<AccountManagementPage/>
         },
         {
             path:'/deposit-requests',

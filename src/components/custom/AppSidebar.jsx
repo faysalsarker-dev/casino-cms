@@ -1,4 +1,4 @@
-import { User, DollarSign, CreditCard, Sliders, LogOut, Home } from "lucide-react";
+import { User, DollarSign, CreditCard, Sliders, LogOut, Home,Landmark  } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -23,6 +23,11 @@ const items = [
     title: "Users",
     url: "/users",
     icon: User,
+  },
+  {
+    title: "Peyment Account",
+    url: "/add-peyment",
+    icon: Landmark ,
   },
   {
     title: "Deposit Requests",

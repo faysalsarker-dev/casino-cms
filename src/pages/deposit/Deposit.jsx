@@ -24,7 +24,7 @@ import { DataTable } from '../users/DataTable';
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
+
   PaginationItem,
   PaginationLink,
   PaginationNext,
