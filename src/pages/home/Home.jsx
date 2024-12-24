@@ -1,4 +1,5 @@
-import React from 'react';
+import { Skeleton } from "@/components/ui/skeleton";
+
 import {
   Card,
   CardContent,
@@ -79,15 +80,31 @@ const Home = () => {
       { month: "Jun", count: 3034 },
     ],
   };
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
+
 
   const { totalUsers, totalDeposit, totalWithdraw, totalSupport, users } = data;
   const labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"];
 
 
-
+  if (isLoading) {
+    return (
+      <div className="p-6 min-h-screen">
+        <h1 className="text-2xl font-bold mb-6">Dashboard Overview</h1>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+          <Skeleton className="h-24" />
+          <Skeleton className="h-24" />
+          <Skeleton className="h-24" />
+          <Skeleton className="h-24" />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
+          <Skeleton className="h-64" />
+          <Skeleton className="h-64" />
+          <Skeleton className="h-64" />
+          <Skeleton className="h-64" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 min-h-screen">

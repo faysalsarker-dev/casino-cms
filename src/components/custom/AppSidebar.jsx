@@ -1,4 +1,4 @@
-import { User, DollarSign, CreditCard, Sliders, LogOut, Home,Landmark  } from "lucide-react";
+import { User, DollarSign, CreditCard, Sliders, LogOut, Home,Landmark,Headset  } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -29,6 +29,7 @@ const items = [
     url: "/add-peyment",
     icon: Landmark ,
   },
+
   {
     title: "Deposit Requests",
     url: "/deposit-requests",
@@ -40,10 +41,15 @@ const items = [
     icon: CreditCard,
   },
   {
-    title: "Slider Management",
-    url: "/slider-management",
-    icon: Sliders,
+    title: "Supports Links",
+    url: "/support",
+    icon: Headset ,
   },
+  // {
+  //   title: "Slider Management",
+  //   url: "/slider-management",
+  //   icon: Sliders,
+  // },
 ];
 
 export function AppSidebar() {

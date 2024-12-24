@@ -161,7 +161,7 @@ export default function AccountManagementPage() {
                 key={item.id}
                 className="flex justify-between items-center bg-gray-100 p-4 rounded shadow"
               >
-                <span>{`Type: ${item.paymentType}`}</span>
+                <span>{`Type: ${item.withdrawType}`}</span>
                 <Button
                   variant="outline"
                   onClick={() => onDeleteType.mutate(item._id)}

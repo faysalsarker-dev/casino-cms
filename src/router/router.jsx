@@ -8,12 +8,14 @@ import WithdrawPage from "@/pages/withdraw/Withdraw";
 import LoginPage from "@/pages/login/LoginPage";
 
 import AccountManagementPage from './../pages/content/AccountManagement';
+import SupportPage from './../pages/support/SupportPage';
+import Protector from "./Protector";
 
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element:<Layout/> ,
+    element:<Protector><Layout/></Protector> ,
     errorElement: <h3>error page</h3>,
     children: [
         {
@@ -27,6 +29,10 @@ const router = createBrowserRouter([
         {
             path:'/add-peyment',
             element:<AccountManagementPage/>
+        },
+        {
+            path:'/support',
+            element:<SupportPage/>
         },
         {
             path:'/deposit-requests',
