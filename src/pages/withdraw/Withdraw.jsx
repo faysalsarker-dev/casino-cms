@@ -2,20 +2,19 @@ import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from '@/hooks/useAxiosSecure/useAxiosSecure';
 import WithdrawTable from './WithdrawTable';
-import useAxios from './../../hooks/useAxios/useAxios';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select';
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
+
   PaginationItem,
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination"
 const WithdrawPage = () => {
-  const axiosCommon = useAxios();
+ 
   const axiosSecure = useAxiosSecure();
   const [status, setStatus] = useState('pending');
   const [date, setDate] = useState('newest');
@@ -43,7 +42,7 @@ const WithdrawPage = () => {
         page: currentPage,
         status:status 
       });
-      const response = await axiosCommon.get(`/withdraw?${params.toString()}`);
+      const response = await axiosSecure.get(`/withdraw?${params.toString()}`);
       return response.data;
     },
     keepPreviousData: true,

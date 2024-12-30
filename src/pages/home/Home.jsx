@@ -1,11 +1,5 @@
 import { Skeleton } from "@/components/ui/skeleton";
-
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Bar, Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -35,56 +29,16 @@ ChartJS.register(
 const Home = () => {
   const axiosSecure = useAxiosSecure();
 
-  const { data:info, isLoading } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['overview'],
     queryFn: async () => {
       const response = await axiosSecure.get(`/dashboard`);
       return response.data;
     },
   });
-  const data = {
-    totalUsers: 1234,
-    totalDeposit: 567890,
-    totalWithdraw: 345678,
-    totalSupport: 89,
-    users: [
-      { month: "Jan", count: 100 },
-      { month: "Feb", count: 1850 },
-      { month: "Mar", count: 200 },
-      { month: "Apr", count: 2350 },
-      { month: "May", count: 300 },
-      { month: "Jun", count: 3950 },
-    ],
-    deposits: [
-      { month: "Jan", count: 50000 },
-      { month: "Feb", count: 595000 },
-      { month: "Mar", count: 68000 },
-      { month: "Apr", count: 644000 },
-      { month: "May", count: 800 },
-      { month: "Jun", count: 75000 },
-    ],
-    withdraws: [
-      { month: "Jan", count: 30000 },
-      { month: "Feb", count: 35000 },
-      { month: "Mar", count: 40000 },
-      { month: "Apr", count: 45000 },
-      { month: "May", count: 50000 },
-      { month: "Jun", count: 55000 },
-    ],
-    supports: [
-      { month: "Jan", count: 180 },
-      { month: "Feb", count: 1452 },
-      { month: "Mar", count: 156 },
-      { month: "Apr", count: 2450 },
-      { month: "May", count: 2554 },
-      { month: "Jun", count: 3034 },
-    ],
-  };
 
-
-  const { totalUsers, totalDeposit, totalWithdraw, totalSupport, users } = data;
+  const { totalUsers, totalDeposit, totalWithdraw, totalSupport, users } = data || {};
   const labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"];
-
 
   if (isLoading) {
     return (
@@ -105,6 +59,52 @@ const Home = () => {
       </div>
     );
   }
+
+  const chartOptions = {
+    responsive: true,
+    plugins: {
+      legend: { display: true },
+      tooltip: {
+        callbacks: {
+          label: function(tooltipItem) {
+            return `${tooltipItem.dataset.label}: ${tooltipItem.raw}`;
+          },
+        },
+      },
+    },
+  };
+
+  const barChartData = {
+    labels,
+    datasets: [
+      {
+        label: 'Deposits',
+        data: data.deposits.map((d) => d.count),
+        backgroundColor: 'rgba(75, 192, 192, 0.7)',
+      },
+      {
+        label: 'Withdrawals',
+        data: data.withdraws.map((w) => w.count),
+        backgroundColor: 'rgba(255, 159, 64, 0.7)',
+      },
+    ],
+  };
+
+  const lineChartData = (label, data, borderColor, bgColor) => ({
+    labels,
+    datasets: [
+      {
+        label,
+        data: data.map((d) => d.count),
+        borderColor,
+        backgroundColor: bgColor,
+        tension: 0.4,
+        fill: true,
+        pointBackgroundColor: borderColor,
+        pointBorderColor: '#fff',
+      },
+    ],
+  });
 
   return (
     <div className="p-6 min-h-screen">
@@ -154,103 +154,37 @@ const Home = () => {
             <CardTitle>Deposits & Withdrawals</CardTitle>
           </CardHeader>
           <CardContent>
-            <Bar
-              data={{
-                labels,
-                datasets: [
-                  {
-                    label: 'Deposits',
-                    data: data.deposits.map((d) => d.count),
-                    backgroundColor: 'rgba(75, 192, 192, 0.7)',
-                  },
-                  {
-                    label: 'Withdrawals',
-                    data: data.withdraws.map((w) => w.count),
-                    backgroundColor: 'rgba(255, 159, 64, 0.7)',
-                  },
-                ],
-              }}
-              options={{ responsive: true }}
-            />
+            <Bar data={barChartData} options={chartOptions} />
           </CardContent>
         </Card>
 
-        {/* Line Chart - Dots */}
+        {/* Line Chart - Monthly Users Growth */}
         <Card className="bg-white shadow-md rounded-lg">
           <CardHeader>
             <CardTitle>Monthly Users Growth</CardTitle>
           </CardHeader>
           <CardContent>
-            <Line
-              data={{
-                labels,
-                datasets: [
-                  {
-                    label: 'Users',
-                    data: users.map((u) => u.count),
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    backgroundColor: 'rgba(75, 192, 192, 0.3)',
-                    pointBackgroundColor: 'rgba(75, 192, 192, 1)',
-                    pointBorderColor: '#fff',
-                    tension: 0.4,
-                  },
-                ],
-              }}
-              options={{
-                responsive: true,
-                plugins: {
-                  legend: { display: true },
-                },
-              }}
-            />
+            <Line data={lineChartData('Users', users, 'rgba(75, 192, 192, 1)', 'rgba(75, 192, 192, 0.3)')} options={chartOptions} />
           </CardContent>
         </Card>
 
-        {/* Line Chart - Label */}
+        {/* Line Chart - Support Requests */}
         <Card className="bg-white shadow-md rounded-lg">
           <CardHeader>
             <CardTitle>Support Requests</CardTitle>
           </CardHeader>
           <CardContent>
-            <Line
-              data={{
-                labels,
-                datasets: [
-                  {
-                    label: 'Support Requests',
-                    data: data.supports.map((s) => s.count),
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    backgroundColor: 'rgba(255, 99, 132, 0.3)',
-                    tension: 0.4,
-                  },
-                ],
-              }}
-              options={{ responsive: true }}
-            />
+            <Line data={lineChartData('Support Requests', data.supports, 'rgba(255, 99, 132, 1)', 'rgba(255, 99, 132, 0.3)')} options={chartOptions} />
           </CardContent>
         </Card>
 
-        {/* Line Chart */}
+        {/* Line Chart - Deposits Trend */}
         <Card className="bg-white shadow-md rounded-lg">
           <CardHeader>
             <CardTitle>Deposits Trend</CardTitle>
           </CardHeader>
           <CardContent>
-            <Line
-              data={{
-                labels,
-                datasets: [
-                  {
-                    label: 'Deposits',
-                    data: data.deposits.map((d) => d.count),
-                    borderColor: 'rgba(153, 102, 255, 1)',
-                    backgroundColor: 'rgba(153, 102, 255, 0.3)',
-                    tension: 0.4,
-                  },
-                ],
-              }}
-              options={{ responsive: true }}
-            />
+            <Line data={lineChartData('Deposits', data.deposits, 'rgba(153, 102, 255, 1)', 'rgba(153, 102, 255, 0.3)')} options={chartOptions} />
           </CardContent>
         </Card>
       </div>

@@ -10,6 +10,7 @@ import LoginPage from "@/pages/login/LoginPage";
 import AccountManagementPage from './../pages/content/AccountManagement';
 import SupportPage from './../pages/support/SupportPage';
 import Protector from "./Protector";
+import Slider from "@/pages/slider/Slider";
 
 
 const router = createBrowserRouter([
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
         {
             path:'/deposit-requests',
             element:<DepositPage/>
+        },
+        {
+            path:'/slider-management',
+            element:<Slider/>
         },
         {
             path:'/withdrawal-requests',

@@ -11,7 +11,6 @@ import { Input } from "@/components/ui/input";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -104,14 +103,8 @@ const Users = () => {
     return () => clearTimeout(handler);
   }, [searchTerm]);
 
-  // Pagination handlers
-  const handlePrevious = () => {
-    if (currentPage > 1) setCurrentPage((prev) => prev - 1);
-  };
+  
 
-  const handleNext = () => {
-    if (data?.totalPages && currentPage < data.totalPages) setCurrentPage((prev) => prev + 1);
-  };
 
   // Columns for DataTable
   const columns = [

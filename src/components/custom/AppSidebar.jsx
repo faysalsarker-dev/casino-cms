@@ -45,11 +45,11 @@ const items = [
     url: "/support",
     icon: Headset ,
   },
-  // {
-  //   title: "Slider Management",
-  //   url: "/slider-management",
-  //   icon: Sliders,
-  // },
+  {
+    title: "Slider Management",
+    url: "/slider-management",
+    icon: Sliders,
+  },
 ];
 
 export function AppSidebar() {
