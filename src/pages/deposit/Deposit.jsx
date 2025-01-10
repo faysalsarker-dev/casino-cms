@@ -65,7 +65,7 @@ const DepositPage = () => {
 
   const onUpdate = useMutation({
     mutationFn: async ({ id, depositBalance, email }) => {
-      const payload = { email, depositBalance, status: 'success' };
+      const payload = { email, depositBalance:parseFloat(depositBalance), status: 'success' };
       await axiosSecure.put(`/deposit/${id}`, payload);
     },
     onSuccess: () => {

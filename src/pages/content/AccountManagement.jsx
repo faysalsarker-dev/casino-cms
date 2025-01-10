@@ -6,13 +6,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "react-hot-toast";
 import useAxiosSecure from "@/hooks/useAxiosSecure/useAxiosSecure";
 
+
 export default function AccountManagementPage() {
   const axiosSecure = useAxiosSecure();
+ 
 
   const { data, refetch } = useQuery({
     queryKey: ["account"],
     queryFn: async () => {
-      const response = await axiosSecure.get(`/peyment`);
+      const response = await axiosSecure.get(`/payment`);
       return response.data;
     },
   });
@@ -31,7 +33,7 @@ export default function AccountManagementPage() {
   };
 
   const onAdd = useMutation({
-    mutationFn: async (data) => await axiosSecure.post(`/peyment`, data),
+    mutationFn: async (data) => await axiosSecure.post(`/payment`, data),
     onSuccess: () => {
       toast.success("Account successfully added!");
       refetch();
@@ -41,7 +43,7 @@ export default function AccountManagementPage() {
   });
 
   const onAddType = useMutation({
-    mutationFn: async (data) => await axiosSecure.post(`/peyment/types`, data),
+    mutationFn: async (data) => await axiosSecure.post(`/payment/types`, data),
     onSuccess: () => {
       toast.success("Withdraw type successfully added!");
       refetch();
@@ -51,7 +53,7 @@ export default function AccountManagementPage() {
   });
 
   const onDelete = useMutation({
-    mutationFn: async (id) => await axiosSecure.delete(`/peyment/${id}`),
+    mutationFn: async (id) => await axiosSecure.delete(`/payment/${id}`),
     onSuccess: () => {
       toast.success("Account successfully deleted!");
       refetch();

@@ -21,9 +21,11 @@ import useAxiosSecure from '@/hooks/useAxiosSecure/useAxiosSecure';
 import { toast } from 'react-hot-toast';
 import { MdDelete, MdEdit } from 'react-icons/md';
 import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogFooter, AlertDialogTitle } from '@/components/ui/alert-dialog';
+import useAxios from '@/hooks/useAxios/useAxios';
 
 const Slider = () => {
   const axiosSecure = useAxiosSecure();
+  const axiosCommon = useAxios()
   const [currentSlider, setCurrentSlider] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [sliderForm, setSliderForm] = useState({ image: null, link: '' });
@@ -44,9 +46,9 @@ const Slider = () => {
   const saveSlider = useMutation({
     mutationFn: async (formData) => {
       if (currentSlider) {
-        return await axiosSecure.put(`/sliders/${currentSlider._id}`, formData);
+        return await axiosCommon.put(`/sliders/${currentSlider._id}`, formData);
       } else {
-        return await axiosSecure.post('/sliders', formData);
+        return await axiosCommon.post('/sliders', formData);
       }
     },
     onSuccess: () => {
@@ -136,7 +138,7 @@ const Slider = () => {
                 className="w-full px-3 py-2 border rounded focus:ring focus:ring-primary"
                 required={!currentSlider}
               />
-              {previewImage && <img src={previewImage ? `http://localhost:5000${previewImage}`: previewImage} alt="Preview" className="mt-2 h-20 w-20 object-cover rounded" />}
+              {previewImage && <img src={previewImage ? `${previewImage}`: previewImage} alt="Preview" className="mt-2 h-20 w-20 object-cover rounded" />}
             </div>
 
             <div>
@@ -174,7 +176,7 @@ const Slider = () => {
       >
         <TableCell className="py-3 px-4">
           <img
-            src={`http://localhost:5000${slider.image}`}
+            src={slider.image}
             alt="Slider"
             className="h-12 w-12 object-cover rounded shadow"
           />

@@ -1,4 +1,5 @@
 import { Navigate, useLocation } from "react-router-dom";
+import PropTypes from 'prop-types';
 
 import useAuth from "../hooks/useAuth/useAuth";
 import ScaleLoader from './../../node_modules/react-spinners/esm/ScaleLoader';
@@ -28,5 +29,9 @@ const Protector = ({ children }) => {
   // Render children if user is authenticated
   return <>{children}</>;
 };
+Protector.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 
 export default Protector;
+

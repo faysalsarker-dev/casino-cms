@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -34,8 +35,10 @@ const WithdrawTable = ({
   isLoading,
 }) => {
   const axiosSecure = useAxiosSecure();
+
   const [selectedItem, setSelectedItem] = useState(null);
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [isEditDialogOpen, setEditDialogOpen] = useState(false);
 
   const onUpdate = useMutation({
     mutationFn: async ({ id, action }) => {
@@ -67,14 +70,6 @@ const WithdrawTable = ({
     deleteTransaction.mutate(id);
   };
 
-  const handleEdit = (item) => {
-    setSelectedItem(item);
-  };
-
-  const closeDialog = () => {
-    setSelectedItem(null);
-  };
-
   if (isLoading) {
     return <p>Loading...</p>;
   }
@@ -91,54 +86,41 @@ const WithdrawTable = ({
             <TableHead>Email</TableHead>
             <TableHead>Amount</TableHead>
             <TableHead>Type</TableHead>
+            <TableHead>Number</TableHead>
             <TableHead>Status</TableHead>
             <TableHead className="text-center">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.length > 0 ? (
+          {data?.length > 0 ? (
             data.map((item) => (
               <TableRow key={item._id}>
                 <TableCell>{item.email}</TableCell>
-                <TableCell>${item.amount.toFixed(2)}</TableCell>
+                <TableCell>${item.amount}</TableCell>
                 <TableCell>{item.type}</TableCell>
+                <TableCell>{item.number}</TableCell>
                 <TableCell>{item.status}</TableCell>
                 <TableCell>
                   <div className="flex justify-center space-x-2">
                     {/* Delete Button */}
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button
-                          variant="destructive"
-                          className="flex items-center space-x-1"
-                        >
-                          <AiOutlineDelete />
-                        </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Delete Transaction</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            Are you sure you want to delete this transaction? This action cannot
-                            be undone.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <Button onClick={closeDialog} variant="ghost">Cancel</Button>
-                          <Button
-                            variant="destructive"
-                            onClick={() => handleDelete(item._id)}
-                          >
-                            Delete
-                          </Button>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
+                    <Button
+                      variant="destructive"
+                      className="flex items-center space-x-1"
+                      onClick={() => {
+                        setSelectedItem(item);
+                        setDeleteDialogOpen(true);
+                      }}
+                    >
+                      <AiOutlineDelete />
+                    </Button>
 
                     {/* Edit Button */}
                     <Button
                       variant="secondary"
-                      onClick={() => handleEdit(item)}
+                      onClick={() => {
+                        setSelectedItem(item);
+                        setEditDialogOpen(true);
+                      }}
                       className="flex items-center space-x-1"
                     >
                       <AiOutlineEdit />
@@ -149,7 +131,7 @@ const WithdrawTable = ({
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={5} className="text-center">
+              <TableCell colSpan={6} className="text-center">
                 No data available
               </TableCell>
             </TableRow>
@@ -164,9 +146,44 @@ const WithdrawTable = ({
         onPageChange={setCurrentPage}
       />
 
+      {/* Delete Dialog */}
+      {isDeleteDialogOpen && selectedItem && (
+        <AlertDialog
+          open={isDeleteDialogOpen}
+          onOpenChange={() => setDeleteDialogOpen(false)}
+        >
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete Transaction</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to delete this transaction? This action
+                cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <Button variant="ghost" onClick={() => setDeleteDialogOpen(false)}>
+                Cancel
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={() => {
+                  handleDelete(selectedItem._id);
+                  setDeleteDialogOpen(false);
+                }}
+              >
+                Delete
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      )}
+
       {/* Edit Dialog */}
-      {selectedItem && (
-        <AlertDialog open={true} onOpenChange={closeDialog}>
+      {isEditDialogOpen && selectedItem && (
+        <AlertDialog
+          open={isEditDialogOpen}
+          onOpenChange={() => setEditDialogOpen(false)}
+        >
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>Edit Transaction</AlertDialogTitle>
@@ -175,63 +192,18 @@ const WithdrawTable = ({
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              {selectedItem.status === 'rejected' && (
-                <>
-                  <Button variant="ghost" onClick={closeDialog}>
-                    Cancel
-                  </Button>
-                  <Button
-                    className="bg-blue-500"
-                    onClick={() => {
-                      onUpdate.mutate({ id: selectedItem._id, action: 'approved' });
-                      closeDialog();
-                    }}
-                  >
-                    Approve
-                  </Button>
-                </>
-              )}
-
-              {selectedItem.status === 'approved' && (
-                <Button
-                  variant="destructive"
-                  onClick={() => {
-                    handleDelete(selectedItem._id);
-                    closeDialog();
-                  }}
-                >
-                  Delete
-                </Button>
-              )}
-
-              {selectedItem.status !== 'approved' &&
-                selectedItem.status !== 'rejected' && (
-                  <div className="flex justify-between w-full">
-                    <Button variant="ghost" onClick={closeDialog}>
-                      Cancel
-                    </Button>
-                    <div>
-                      <Button
-                        variant="destructive"
-                        onClick={() => {
-                          onUpdate.mutate({ id: selectedItem._id, action: 'rejected' });
-                          closeDialog();
-                        }}
-                      >
-                        Reject
-                      </Button>
-                      <Button
-                        className="bg-blue-500 ml-3"
-                        onClick={() => {
-                          onUpdate.mutate({ id: selectedItem._id, action: 'approved' });
-                          closeDialog();
-                        }}
-                      >
-                        Approve
-                      </Button>
-                    </div>
-                  </div>
-                )}
+              <Button variant="ghost" onClick={() => setEditDialogOpen(false)}>
+                Cancel
+              </Button>
+              <Button
+                className="bg-blue-500"
+                onClick={() => {
+                  onUpdate.mutate({ id: selectedItem._id, action: 'approved' });
+                  setEditDialogOpen(false);
+                }}
+              >
+                Approve
+              </Button>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
